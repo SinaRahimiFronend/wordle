@@ -33,7 +33,7 @@ export default function Board() {
 
   const handleKeyUp = useCallback(
     (key: string) => {
-      if (activeTry === words.length) return;
+      if (activeTry > words.length) return;
       if (key >= 'a' && key <= 'z') {
         setWords(prevWords => {
           const newWords = [...prevWords];
