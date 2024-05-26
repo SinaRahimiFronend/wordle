@@ -54,10 +54,10 @@ export default function Keyboard({
   );
 
   return (
-    <div className="text-white max-w-[690px] flex flex-wrap justify-center gap-2 mx-auto absolute bottom-20 left-1/2 -translate-x-1/2">
+    <div className="text-white max-w-[690px] flex flex-wrap justify-center gap-2 mx-auto mt-24">
       {letters.map(letter => (
         <button key={letter.id} onClick={() => handleKeyPress(letter.value)}>
-          <Tile tile={letter} active={letter.status !== 'wrong'} />
+          <Tile tile={letter} keyboard />
         </button>
       ))}
     </div>

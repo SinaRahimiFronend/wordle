@@ -19,11 +19,13 @@ export default function Board() {
           id: String(i) + String(j),
           value: words[i][j] || '',
           status:
-            hiddenWord[j] === words[i][j]
-              ? 'correct'
-              : hiddenWord.includes(words[i][j])
-              ? 'exists'
-              : 'wrong',
+            activeTry > i
+              ? hiddenWord[j] === words[i][j]
+                ? 'correct'
+                : hiddenWord.includes(words[i][j])
+                ? 'exists'
+                : 'wrong'
+              : 'empty',
         });
       }
       newRows.push(newRow);
@@ -82,8 +84,8 @@ export default function Board() {
   return (
     <div>
       <div className="text-white mx-auto w-max max-w-l p-1 mt-12 flex flex-col gap-2">
-        {rows.map((row, i) => (
-          <Row key={row.id} row={row} active={activeTry > i} />
+        {rows.map(row => (
+          <Row key={row.id} row={row} />
         ))}
       </div>
       <Keyboard
@@ -104,11 +106,11 @@ export default function Board() {
   );
 }
 
-function Row({ row, active }: { row: TilesRow; active: boolean }) {
+function Row({ row }: { row: TilesRow }) {
   return (
     <div className="flex gap-2">
       {row.tiles.map(tile => (
-        <Tile key={tile.id} tile={tile} active={active} />
+        <Tile key={tile.id} tile={tile} />
       ))}
     </div>
   );
