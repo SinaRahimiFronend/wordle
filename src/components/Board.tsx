@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import ResultDialog from './ResultDialog';
 import { TilesRow } from '../types/types';
 import Tile from './Tile';
+import Keyboard from './Keyboard';
 
 const hiddenWord = 'PLINE';
 
@@ -31,23 +32,24 @@ export default function Board() {
   }, [words, activeTry]);
 
   const handleKeyUp = useCallback(
-    (e: KeyboardEvent) => {
-      if (e.key >= 'a' && e.key <= 'z') {
+    (key: string) => {
+      if (activeTry === 5) return;
+      if (key >= 'a' && key <= 'z') {
         setWords(prevWords => {
           const newWords = [...prevWords];
           if (newWords[activeTry].length < 5) {
-            newWords[activeTry] += e.key.toLocaleUpperCase();
+            newWords[activeTry] += key.toLocaleUpperCase();
           }
           return newWords;
         });
-      } else if (e.key === 'Backspace') {
+      } else if (key === 'Backspace') {
         setWords(prevWords => {
           const newWords = [...prevWords];
           newWords[activeTry] = newWords[activeTry].slice(0, -1);
 
           return newWords;
         });
-      } else if (e.key === 'Enter') {
+      } else if (key === 'Enter') {
         if (words[activeTry].length === 5) setActiveTry(prev => prev + 1);
         else console.log('wrong');
       }
@@ -56,10 +58,14 @@ export default function Board() {
   );
 
   useEffect(() => {
-    document.addEventListener('keyup', handleKeyUp);
+    function handleKeyPress(e: KeyboardEvent) {
+      handleKeyUp(e.key);
+    }
+
+    document.addEventListener('keyup', handleKeyPress);
 
     return () => {
-      document.removeEventListener('keyup', handleKeyUp);
+      document.removeEventListener('keyup', handleKeyPress);
     };
   }, [handleKeyUp]);
 
@@ -74,10 +80,20 @@ export default function Board() {
   const isVictory = matchedWordIndex !== -1 && activeTry > matchedWordIndex;
 
   return (
-    <div className="text-white mx-auto w-max max-w-l p-1 mt-12 flex flex-col gap-2">
-      {rows.map((row, i) => (
-        <Row key={row.id} row={row} active={activeTry > i} />
-      ))}
+    <div>
+      <div className="text-white mx-auto w-max max-w-l p-1 mt-12 flex flex-col gap-2">
+        {rows.map((row, i) => (
+          <Row key={row.id} row={row} active={activeTry > i} />
+        ))}
+      </div>
+      <Keyboard
+        handleKeyPress={handleKeyUp}
+        checkedLetters={rows
+          .slice(0, activeTry)
+          .map(row => row.tiles)
+          .flat()
+          .filter(tile => !!tile.value)}
+      />
       {isVictory && (
         <ResultDialog text="You Have won🎉" handleReset={handleGameReset} />
       )}

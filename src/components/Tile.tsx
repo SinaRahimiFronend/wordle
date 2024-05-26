@@ -26,7 +26,7 @@ export default function Tile({
   }
   return (
     <div
-      className="border-2 border-zinc-700 h-14 w-14 flex items-center justify-center text-3xl"
+      className="border-2 border-zinc-700 h-14 min-w-14 flex items-center justify-center text-3xl p-2"
       style={{
         backgroundColor: bgColor,
       }}
