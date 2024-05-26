@@ -1,28 +1,18 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import ResultDialog from './ResultDialog';
+import { TilesRow } from '../types/types';
+import Tile from './Tile';
 
-interface Row {
-  id: number;
-  tiles: Tile[];
-  isCompleted: boolean;
-}
-
-interface Tile {
-  id: string;
-  value: string;
-  status: 'exists' | 'correct' | 'wrong';
-}
+const hiddenWord = 'PLINE';
 
 export default function Board() {
   const [words, setWords] = useState<string[]>(['', '', '', '', '']);
   const [activeTry, setActiveTry] = useState(0);
 
-  const [hiddenWord, setHiddenWord] = useState('PLINE');
-
-  const rows = useMemo<Row[]>(() => {
-    const newRows: Row[] = [];
+  const rows = useMemo<TilesRow[]>(() => {
+    const newRows: TilesRow[] = [];
     for (let i = 0; i < 5; i++) {
-      const newRow: Row = { id: i, tiles: [], isCompleted: activeTry > i };
+      const newRow: TilesRow = { id: i, tiles: [], isCompleted: activeTry > i };
       for (let j = 0; j < 5; j++) {
         newRow.tiles.push({
           id: String(i) + String(j),
@@ -38,7 +28,7 @@ export default function Board() {
       newRows.push(newRow);
     }
     return newRows;
-  }, [words, activeTry, hiddenWord]);
+  }, [words, activeTry]);
 
   const handleKeyUp = useCallback(
     (e: KeyboardEvent) => {
@@ -98,42 +88,12 @@ export default function Board() {
   );
 }
 
-function Row({ row, active }: { row: Row; active: boolean }) {
+function Row({ row, active }: { row: TilesRow; active: boolean }) {
   return (
     <div className="flex gap-2">
       {row.tiles.map(tile => (
         <Tile key={tile.id} tile={tile} active={active} />
       ))}
-    </div>
-  );
-}
-
-function Tile({ tile, active }: { tile: Tile; active: boolean }) {
-  let bgColor = '#000';
-  if (active) {
-    switch (tile.status) {
-      case 'correct':
-        bgColor = '#538d4e';
-        break;
-      case 'exists':
-        bgColor = '#b59f3b';
-        break;
-      case 'wrong':
-        bgColor = '#3a3a3c';
-        break;
-      default:
-        bgColor = '#3a3a3c';
-        break;
-    }
-  }
-  return (
-    <div
-      className="border-2 border-zinc-700 h-14 w-14 flex items-center justify-center text-3xl"
-      style={{
-        backgroundColor: bgColor,
-      }}
-    >
-      {tile.value.toUpperCase()}
     </div>
   );
 }
