@@ -23,7 +23,7 @@ export default function Board() {
               ? hiddenWord[j] === words[i][j]
                 ? 'correct'
                 : hiddenWord.includes(words[i][j])
-                ? 'exists'
+                ? 'misplaced'
                 : 'wrong'
               : 'empty',
         });

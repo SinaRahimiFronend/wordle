@@ -12,7 +12,7 @@ export default function Tile({
     case 'correct':
       bgColor = '#538d4e';
       break;
-    case 'exists':
+    case 'misplaced':
       bgColor = '#b59f3b';
       break;
     case 'wrong':

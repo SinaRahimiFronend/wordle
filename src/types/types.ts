@@ -7,5 +7,5 @@ export interface TilesRow {
 export interface LetterTile {
   id: string;
   value: string;
-  status: 'exists' | 'correct' | 'wrong' | 'idle' | 'empty';
+  status: 'misplaced' | 'correct' | 'wrong' | 'idle' | 'empty';
 }

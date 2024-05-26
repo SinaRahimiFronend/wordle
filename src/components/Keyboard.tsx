@@ -41,9 +41,15 @@ export default function Keyboard({
         'm',
         'Backspace',
       ].map(letter => {
-        const matchedLetter = checkedLetters.find(
-          tile => tile.value.toLocaleLowerCase() === letter
-        );
+        const matchedLetter =
+          checkedLetters.find(
+            tile =>
+              tile.value.toLocaleLowerCase() === letter &&
+              tile.status === 'correct'
+          ) ||
+          checkedLetters.find(
+            tile => tile.value.toLocaleLowerCase() === letter
+          ); // to prioritize correct letters over misplaced ones
         return {
           status: matchedLetter ? matchedLetter.status : 'idle',
           value: letter,
