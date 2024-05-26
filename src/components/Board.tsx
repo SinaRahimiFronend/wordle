@@ -11,6 +11,7 @@ export default function Board() {
   const [activeTry, setActiveTry] = useState(0);
 
   const rows = useMemo<TilesRow[]>(() => {
+    // creating board rows and tiles based on letters entered
     const newRows: TilesRow[] = [];
     for (let i = 0; i < 6; i++) {
       const newRow: TilesRow = { id: i, tiles: [], isCompleted: activeTry > i };
@@ -19,8 +20,8 @@ export default function Board() {
           id: String(i) + String(j),
           value: words[i][j] || "",
           status:
-            activeTry > i
-              ? hiddenWord[j] === words[i][j]
+            activeTry > i // checks if this try is finished
+              ? hiddenWord[j] === words[i][j] // comparing values of each tile and corresponding letter of hiddenWord
                 ? "correct"
                 : hiddenWord.includes(words[i][j])
                 ? "misplaced"
@@ -90,11 +91,10 @@ export default function Board() {
       </div>
       <Keyboard
         handleKeyPress={handleKeyUp}
-        checkedLetters={rows
+        usedLetters={rows
           .slice(0, activeTry)
           .map((row) => row.tiles)
-          .flat()
-          .filter((tile) => !!tile.value)}
+          .flat()}
       />
       {isVictory && (
         <ResultDialog text="You Have won🎉" handleReset={handleGameReset} />
