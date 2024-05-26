@@ -7,12 +7,12 @@ import Keyboard from './Keyboard';
 const hiddenWord = 'PLINE';
 
 export default function Board() {
-  const [words, setWords] = useState<string[]>(['', '', '', '', '']);
+  const [words, setWords] = useState<string[]>(['', '', '', '', '', '']);
   const [activeTry, setActiveTry] = useState(0);
 
   const rows = useMemo<TilesRow[]>(() => {
     const newRows: TilesRow[] = [];
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 6; i++) {
       const newRow: TilesRow = { id: i, tiles: [], isCompleted: activeTry > i };
       for (let j = 0; j < 5; j++) {
         newRow.tiles.push({
@@ -33,7 +33,7 @@ export default function Board() {
 
   const handleKeyUp = useCallback(
     (key: string) => {
-      if (activeTry === 5) return;
+      if (activeTry === words.length) return;
       if (key >= 'a' && key <= 'z') {
         setWords(prevWords => {
           const newWords = [...prevWords];
@@ -70,13 +70,13 @@ export default function Board() {
   }, [handleKeyUp]);
 
   function handleGameReset() {
-    setWords(['', '', '', '', '']);
+    setWords(['', '', '', '', '', '']);
     setActiveTry(0);
   }
 
   const matchedWordIndex = words.findIndex(word => word === hiddenWord);
 
-  const isLost = matchedWordIndex === -1 && activeTry === 5;
+  const isLost = matchedWordIndex === -1 && activeTry === words.length;
   const isVictory = matchedWordIndex !== -1 && activeTry > matchedWordIndex;
 
   return (

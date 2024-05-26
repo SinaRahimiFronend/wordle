@@ -9,7 +9,6 @@ export default function Keyboard({
   handleKeyPress: (key: string) => void;
   checkedLetters: LetterTile[];
 }) {
-  console.log('🚀 ~ checkedLetters:', checkedLetters);
   const letters = useMemo(
     () =>
       [
